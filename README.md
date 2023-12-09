@@ -4,9 +4,20 @@
 Munch 'Em All
 </h2>
 
+[![Itch.io](https://img.shields.io/badge/Itch-%23FF0B34.svg?style=for-the-badge&logo=Itch.io&logoColor=white)](https://brianwo.itch.io/muncher)
+
 A game made for [Flame Game Jam 3.0](https://itch.io/jam/flame-jam-3).
 
+Pre-built binary for Linux will available post jam. No plan for other platforms. \
+Web version available on [Itch.io](https://brianwo.itch.io/muncher).
+
 ---
+
+### Licenses
+
+Assets are proprietary, third party assets are released released their respective license. Check the "Third Party Licenses" section for more.
+
+Source code available under BSD3 license. Check [LISENSE](./LICENSE) for more.
 
 ### Third Party Licenses:
 
