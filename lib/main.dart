@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flame/game.dart';
 import 'package:flamejam/game.dart';
 import 'package:flamejam/screens/intro.dart';

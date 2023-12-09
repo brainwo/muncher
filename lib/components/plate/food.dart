@@ -1,11 +1,14 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flamejam/game.dart';
 import 'package:flutter/material.dart';
+
+const List<Map<String, dynamic>> food = [
+  {"name": ""}
+];
 
 enum Temperature {
   hot,

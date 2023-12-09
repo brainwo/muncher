@@ -26,7 +26,7 @@ flutter:
   uses-material-design: false
 
   assets:
-    - assets/images/character.png
+    - assets/images/
 
   fonts:
     - family: Carme

@@ -1,10 +1,12 @@
 import 'package:flame/collisions.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/timer.dart';
-import 'package:flamejam/components/clock.dart';
 
 import 'package:flamejam/components/dash.dart';
-import 'package:flamejam/components/food.dart';
+import 'package:flamejam/components/plate/food.dart';
+import 'package:flamejam/components/ui/clock.dart';
+
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
@@ -20,6 +22,8 @@ class MyGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
+    await Flame.images.load('foods.png');
+
     countdown = Timer(gameLength);
 
     final foods = [
@@ -42,8 +46,12 @@ class MyGame extends FlameGame {
   @override
   void render(Canvas canvas) {
     canvas.drawRect(
-      const Rect.fromLTWH(0, 0, 656, 257),
+      const Rect.fromLTWH(0, 0, 656, 132),
       Paint()..color = const Color.fromRGBO(255, 255, 255, 1),
+    );
+    canvas.drawRect(
+      const Rect.fromLTWH(0, 132, 656, 125),
+      Paint()..color = const Color.fromRGBO(237, 237, 237, 1),
     );
     canvas.drawRect(
       const Rect.fromLTWH(0, 257, 656, 33),
@@ -52,6 +60,10 @@ class MyGame extends FlameGame {
     canvas.drawRect(
       const Rect.fromLTWH(0, 290, 656, 164),
       Paint()..color = const Color.fromRGBO(197, 121, 66, 1),
+    );
+    canvas.drawOval(
+      const Rect.fromLTWH(170, 255, 316, 32),
+      Paint()..color = const Color.fromRGBO(123, 67, 67, 1),
     );
 
     super.render(canvas);
