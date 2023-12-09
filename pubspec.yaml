@@ -1,0 +1,37 @@
+name: flamejam
+description: A simple Flame game.
+version: 0.1.0
+
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flame: 1.11.0
+  flame_audio: 2.1.4
+  flame_svg: 1.8.6
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: 1.1.2
+  flame_test: 1.15.0
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: false
+
+  assets:
+    - assets/images/character.png
+
+  fonts:
+    - family: Carme
+      fonts:
+        - asset: assets/fonts/Carme-Regular.ttf
+    - family: TitanOne
+      fonts:
+        - asset: assets/fonts/TitanOne-Regular.ttf
