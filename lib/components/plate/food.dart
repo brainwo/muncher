@@ -31,7 +31,7 @@ class Food extends PositionComponent
         CollisionCallbacks,
         TapCallbacks,
         HoverCallbacks {
-  Food(this.temp) : super(size: Vector2(85, 75));
+  Food({required this.temp, super.position}) : super(size: Vector2(85, 75));
 
   final Temperature temp;
   late ShapeHitbox hitbox;

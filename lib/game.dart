@@ -39,17 +39,19 @@ class MyGame extends FlameGame {
     tableBackdrop = await imagesLoader.load('table.png');
     tableBackdropFlipped = await imagesLoader.load('table_flipped.png');
 
+    final sprite = await loadSprite('eating_normal_1.png');
+
     countdown = Timer(gameLength);
     clock = Clock(time: countdown.current, gameLength: gameLength);
     fever = Fever(feverGauge: feverGauge);
     thermo = Thermometer(temp: temp);
 
     final foods = [
-      Food(Temperature.hot),
-      Food(Temperature.hot),
-      Food(Temperature.hot),
+      Food(temp: Temperature.hot, position: Vector2(-182, 75)),
+      Food(temp: Temperature.hot, position: Vector2(-32, 86)),
+      Food(temp: Temperature.hot, position: Vector2(108, 75)),
     ];
-    final dash = Dash();
+    final dash = Dash(sprite: sprite);
 
     add(ScreenHitbox());
 
