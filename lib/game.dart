@@ -192,7 +192,7 @@ class MyGame extends FlameGame {
               food.temp == Temperature.cold ||
               food.temp == Temperature.supercold,
         ) &&
-        temp > 36) {
+        temp < 12) {
       foods.forEach((food) {
         food.isDraggable = false;
       });
@@ -204,7 +204,7 @@ class MyGame extends FlameGame {
           (food) =>
               food.temp == Temperature.hot || food.temp == Temperature.extrahot,
         ) &&
-        temp < 12) {
+        temp > 36) {
       foods.forEach((food) {
         food.isDraggable = false;
       });
