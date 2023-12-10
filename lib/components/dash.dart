@@ -14,6 +14,9 @@ class Dash extends PositionComponent
   final bool debugMode = kDebugMode;
 
 
+
+
   @override
-  void render(Canvas canvas) {}
+  void render(Canvas canvas) {
+  }
 }

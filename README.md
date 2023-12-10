@@ -224,3 +224,8 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 ```
 
 </details>
+
+<details>
+  <summary>Sound effects obtained from https://www.zapsplat.com</summary>
+  Read https://www.zapsplat.com/license-type/standard-license/ for more info
+</details>

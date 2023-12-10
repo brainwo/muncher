@@ -23,7 +23,7 @@ class MyGame extends FlameGame {
   final TextPaint textConfig = TextPaint(
     style: const TextStyle(color: Colors.black, fontSize: 20),
   );
-  final clock = Clock();
+  late final Clock clock;
   final fever = Fever();
   final thermo = Thermometer();
   final imagesLoader = Images();
@@ -38,6 +38,7 @@ class MyGame extends FlameGame {
     tableBackdropFlipped = await imagesLoader.load('table_flipped.png');
 
     countdown = Timer(gameLength);
+    clock = Clock(time: countdown.current, gameLength: gameLength);
 
     final foods = [
       Food(Temperature.hot),
@@ -105,6 +106,8 @@ class MyGame extends FlameGame {
   @override
   void update(double dt) {
     countdown.update(dt);
+    clock.time = countdown.current;
+
     super.update(dt);
   }
 }
