@@ -42,11 +42,13 @@ class Clock extends PositionComponent {
     canvas.drawVertices(
       Vertices(VertexMode.triangles, [
         const Offset(40, 4),
-        const Offset(41, 40),
+        const Offset(40, 40),
         const Offset(15, 17),
       ]),
       BlendMode.src,
-      Paint()..color = const Color.fromRGBO(250, 103, 103, 1),
+      Paint()
+        ..filterQuality = FilterQuality.high
+        ..color = const Color.fromRGBO(250, 103, 103, 1),
     );
     canvas.drawCircle(
       const Offset(_diameterOuter / 2, _diameterOuter / 2),

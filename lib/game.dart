@@ -23,7 +23,7 @@ class MyGame extends FlameGame {
   double temp = 24;
   late Timer countdown;
   final TextPaint textConfig = TextPaint(
-    style: const TextStyle(color: Colors.black, fontSize: 20),
+    style: const TextStyle(color: Colors.black, fontSize: 14),
   );
   late final Clock clock;
   late final Fever fever;
@@ -96,13 +96,13 @@ class MyGame extends FlameGame {
       );
       textConfig.render(
         canvas,
-        'Temp: $temp °C',
-        Vector2(30, 60),
+        'Temp: ${temp.toStringAsFixed(1)} °C',
+        Vector2(30, 50),
       );
       textConfig.render(
         canvas,
         'Countdown: ${(gameLength - countdown.current).toInt()}',
-        Vector2(30, 90),
+        Vector2(30, 70),
       );
     }
   }
@@ -111,11 +111,10 @@ class MyGame extends FlameGame {
   void update(double dt) {
     countdown.update(dt);
     feverGauge = min((countdown.current * 4) / gameLength, 1);
-    // temp =
-    // (sin(countdown.current / gameLength * (2 * pi)) * diameterOuter / 2) +
-    // diameterOuter / 2;
+    temp = (sin(countdown.current / gameLength * (2 * pi)) * 24) + 24;
     fever.feverGauge = feverGauge;
     clock.time = countdown.current;
+    thermo.temp = temp;
 
     super.update(dt);
   }

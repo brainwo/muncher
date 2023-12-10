@@ -43,7 +43,7 @@ class Food extends PositionComponent
   @override
   FutureOr<void> onLoad() {
     final defaultPaint = Paint()
-      ..color = Colors.yellow
+      ..color = kDebugMode ? Colors.yellow : Colors.transparent
       ..style = PaintingStyle.stroke;
     hitbox = CircleHitbox()
       ..paint = defaultPaint
