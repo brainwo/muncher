@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
@@ -19,13 +20,14 @@ const double gameLength = 120;
 
 class MyGame extends FlameGame {
   double feverGauge = 0;
+  double temp = 24;
   late Timer countdown;
   final TextPaint textConfig = TextPaint(
     style: const TextStyle(color: Colors.black, fontSize: 20),
   );
   late final Clock clock;
-  final fever = Fever();
-  final thermo = Thermometer();
+  late final Fever fever;
+  late final Thermometer thermo;
   final imagesLoader = Images();
   late final Image tableBackdrop;
   late final Image tableBackdropFlipped;
@@ -39,6 +41,8 @@ class MyGame extends FlameGame {
 
     countdown = Timer(gameLength);
     clock = Clock(time: countdown.current, gameLength: gameLength);
+    fever = Fever(feverGauge: feverGauge);
+    thermo = Thermometer(temp: temp);
 
     final foods = [
       Food(Temperature.hot),
@@ -87,17 +91,17 @@ class MyGame extends FlameGame {
     if (kDebugMode) {
       textConfig.render(
         canvas,
-        'Fever: ${feverGauge / 1}%',
+        'Fever: ${(feverGauge * 100).toStringAsFixed(1)}%',
         Vector2(30, 30),
       );
       textConfig.render(
         canvas,
-        'Temp: 24 °C',
+        'Temp: $temp °C',
         Vector2(30, 60),
       );
       textConfig.render(
         canvas,
-        'Countdown: ${(gameLength - countdown.current).toStringAsPrecision(3)}',
+        'Countdown: ${(gameLength - countdown.current).toInt()}',
         Vector2(30, 90),
       );
     }
@@ -106,6 +110,11 @@ class MyGame extends FlameGame {
   @override
   void update(double dt) {
     countdown.update(dt);
+    feverGauge = min((countdown.current * 4) / gameLength, 1);
+    // temp =
+    // (sin(countdown.current / gameLength * (2 * pi)) * diameterOuter / 2) +
+    // diameterOuter / 2;
+    fever.feverGauge = feverGauge;
     clock.time = countdown.current;
 
     super.update(dt);

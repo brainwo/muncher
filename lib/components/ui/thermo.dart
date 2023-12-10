@@ -5,7 +5,9 @@ import 'package:flamejam/const.dart';
 import 'package:flutter/foundation.dart';
 
 class Thermometer extends PositionComponent {
-  Thermometer() : super(size: Vector2(327, 18), position: Vector2(163, 41));
+  double temp;
+  Thermometer({required this.temp})
+      : super(size: Vector2(327, 18), position: Vector2(163, 41));
 
   @override
   final bool debugMode = kDebugMode;

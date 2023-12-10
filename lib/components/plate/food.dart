@@ -63,7 +63,7 @@ class Food extends PositionComponent
   @override
   void update(double dt) {
     super.update(dt);
-    debugColor = isDragged ? Colors.greenAccent : Colors.purple;
+    debugColor = _isDragged ? Colors.greenAccent : Colors.purple;
   }
 
   @override
@@ -112,6 +112,5 @@ class Food extends PositionComponent
     if (topComponent != this) {
       priority = topComponent.priority + 1;
     }
-    print("jomama");
   }
 }

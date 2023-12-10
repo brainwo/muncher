@@ -5,9 +5,9 @@ import 'package:flame/components.dart';
 import 'package:flamejam/const.dart';
 import 'package:flutter/foundation.dart';
 
-const double diameterOuter = 83;
-const double diameterInner = 68;
-const double diameterArrow = 21;
+const double _diameterOuter = 83;
+const double _diameterInner = 68;
+const double _diameterArrow = 21;
 
 class Clock extends PositionComponent {
   double time;
@@ -15,7 +15,7 @@ class Clock extends PositionComponent {
 
   Clock({required this.time, required this.gameLength})
       : super(
-          size: Vector2(diameterOuter, diameterOuter),
+          size: Vector2(_diameterOuter, _diameterOuter),
           position: Vector2(560, 17),
         );
 
@@ -25,18 +25,18 @@ class Clock extends PositionComponent {
   @override
   void render(Canvas canvas) {
     canvas.drawCircle(
-      const Offset(diameterOuter / 2 + shadow, diameterOuter / 2 + shadow),
-      diameterOuter / 2,
+      const Offset(_diameterOuter / 2 + shadow, _diameterOuter / 2 + shadow),
+      _diameterOuter / 2,
       Paint()..color = const Color.fromRGBO(0, 0, 0, 1),
     );
     canvas.drawCircle(
-      const Offset(diameterOuter / 2, diameterOuter / 2),
-      diameterOuter / 2,
+      const Offset(_diameterOuter / 2, _diameterOuter / 2),
+      _diameterOuter / 2,
       Paint()..color = const Color.fromRGBO(242, 73, 73, 1),
     );
     canvas.drawCircle(
-      const Offset(diameterOuter / 2, diameterOuter / 2),
-      diameterInner / 2,
+      const Offset(_diameterOuter / 2, _diameterOuter / 2),
+      _diameterInner / 2,
       Paint()..color = const Color.fromRGBO(255, 255, 255, 1),
     );
     canvas.drawVertices(
@@ -49,19 +49,19 @@ class Clock extends PositionComponent {
       Paint()..color = const Color.fromRGBO(250, 103, 103, 1),
     );
     canvas.drawCircle(
-      const Offset(diameterOuter / 2, diameterOuter / 2),
-      diameterArrow / 2,
+      const Offset(_diameterOuter / 2, _diameterOuter / 2),
+      _diameterArrow / 2,
       Paint()..color = const Color.fromRGBO(0, 0, 0, 1),
     );
 
     canvas.drawLine(
       Offset(
-        (sin(time / gameLength * (2 * pi)) * diameterOuter / 2) +
-            diameterOuter / 2,
-        (-cos(time / gameLength * (2 * pi)) * diameterOuter / 2) +
-            diameterOuter / 2,
+        (sin(time / gameLength * (2 * pi)) * _diameterOuter / 2) +
+            _diameterOuter / 2,
+        (-cos(time / gameLength * (2 * pi)) * _diameterOuter / 2) +
+            _diameterOuter / 2,
       ),
-      const Offset(diameterOuter / 2, diameterOuter / 2),
+      const Offset(_diameterOuter / 2, _diameterOuter / 2),
       Paint()
         ..color = const Color.fromRGBO(0, 0, 0, 1)
         ..strokeWidth = 8,
