@@ -15,7 +15,7 @@ List<Map<String, dynamic>> foodList = [
     'property': 2,
     'temp': 'extrahot',
     'position': Vector2(6, 2),
-    'size': Vector2(71, 83)
+    'size': Vector2(71, 83),
   },
   {
     'name': 'tea',
@@ -90,9 +90,23 @@ class Food extends SpriteComponent
         CollisionCallbacks,
         TapCallbacks,
         HoverCallbacks {
-  Food({required this.temp, super.position, super.size, super.sprite});
+  Food({
+    required this.temp,
+    required this.originPosition,
+    required this.platePosition,
+    required this.plateSize,
+    required this.onEatCallback,
+    super.position,
+    super.size,
+    super.sprite,
+  });
 
-  factory Food.create() {
+  factory Food.create({
+    required Vector2 originPosition,
+    required Vector2 platePosition,
+    required Vector2 plateSize,
+    required bool Function(Temperature) onEatCallback,
+  }) {
     final food = foodList.random();
 
     final foodSprite = Sprite(
@@ -102,6 +116,11 @@ class Food extends SpriteComponent
     );
 
     return Food(
+      originPosition: originPosition,
+      platePosition: platePosition,
+      plateSize: plateSize,
+      position: originPosition,
+      onEatCallback: onEatCallback,
       temp: switch (food['temp']) {
         'extrahot' => Temperature.extrahot,
         'hot' => Temperature.hot,
@@ -115,12 +134,42 @@ class Food extends SpriteComponent
     );
   }
 
-  final Temperature temp;
+  Temperature temp;
+  Vector2 originPosition;
+  final Vector2 platePosition;
+  final Vector2 plateSize;
   late ShapeHitbox hitbox;
   bool _isDragged = false;
+  bool isDraggable = true;
+  final bool Function(Temperature) onEatCallback;
 
   @override
   final bool debugMode = kDebugMode;
+
+  void loadOtherFood() {
+    final food = foodList.random();
+    final Vector2 foodSize = food['size'] as Vector2;
+
+    final foodSprite = Sprite(
+      Flame.images.fromCache('foods.png'),
+      srcSize: food['size'] as Vector2,
+      srcPosition: food['position'] as Vector2,
+    );
+    temp = switch (food['temp']) {
+      'extrahot' => Temperature.extrahot,
+      'hot' => Temperature.hot,
+      'normal' => Temperature.normal,
+      'cold' => Temperature.cold,
+      'supercold' => Temperature.supercold,
+      _ => Temperature.normal,
+    };
+    size = food['size'] as Vector2;
+    sprite = foodSprite;
+    position =
+        (platePosition + plateSize / 2) - Vector2(foodSize.x / 2, foodSize.y);
+    originPosition =
+        (platePosition + plateSize / 2) - Vector2(foodSize.x / 2, foodSize.y);
+  }
 
   @override
   FutureOr<void> onLoad() {
@@ -162,12 +211,24 @@ class Food extends SpriteComponent
   @override
   void onDragEnd(DragEndEvent event) {
     _isDragged = false;
+
+    if (const Rect.fromLTRB(-110, -140, 110, 70)
+        .contains(Offset(position.x, position.y))) {
+      final result = onEatCallback(temp);
+      if (result == true) {
+        loadOtherFood();
+      }
+    }
+    position = originPosition;
+
     super.onDragEnd(event);
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    position += event.localDelta;
+    if (isDraggable) {
+      position += event.localDelta;
+    }
   }
 
   @override

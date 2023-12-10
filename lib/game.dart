@@ -6,6 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 import 'package:flamejam/components/dash.dart';
 import 'package:flamejam/components/plate/food.dart';
@@ -39,7 +40,13 @@ class MyGame extends FlameGame {
   late final SpriteAnimation animationEatingNormal;
   late final SpriteAnimation animationEatingHot;
   late final SpriteAnimation animationEatingCold;
-  late final SpriteAnimation animationHungry;
+  late final SpriteAnimation animationHungryNormal;
+  late final SpriteAnimation animationHungryHot;
+  late final SpriteAnimation animationHungryCold;
+
+  late final Iterable<Food> foods;
+
+  bool isPlaying = true;
 
   @override
   Future<void> onLoad() async {
@@ -57,7 +64,9 @@ class MyGame extends FlameGame {
     animationEatingNormal = spriteSheet.createAnimation(row: 0, stepTime: 0.3);
     animationEatingHot = spriteSheet.createAnimation(row: 1, stepTime: 0.3);
     animationEatingCold = spriteSheet.createAnimation(row: 2, stepTime: 0.3);
-    animationHungry = spriteSheet.createAnimation(row: 3, stepTime: 0.3);
+    animationHungryNormal = spriteSheet.createAnimation(row: 3, stepTime: 0.3);
+    animationHungryHot = spriteSheet.createAnimation(row: 4, stepTime: 0.3);
+    animationHungryCold = spriteSheet.createAnimation(row: 5, stepTime: 0.3);
 
     countdown = Timer(gameLength);
     clock = Clock(time: countdown.current, gameLength: gameLength);
@@ -70,11 +79,48 @@ class MyGame extends FlameGame {
       Plate(position: Vector2(89, 90)),
     ];
 
-    final foods = [
-      Food.create(),
-      Food.create(),
-      Food.create(),
-    ];
+    foods = plates.map((plate) {
+      final food = Food.create(
+        originPosition:
+            plate.position + Vector2(plate.size.x / 2, plate.size.y / 2),
+        platePosition: plate.position,
+        plateSize: plate.size,
+        onEatCallback: (foodTemp) {
+          if (temp > 36 &&
+              (foodTemp == Temperature.hot ||
+                  foodTemp == Temperature.extrahot)) {
+            return false;
+          }
+          if (temp < 12 &&
+              (foodTemp == Temperature.cold ||
+                  foodTemp == Temperature.supercold)) {
+            return false;
+          }
+          switch (foodTemp) {
+            case Temperature.extrahot:
+              temp += 6;
+            case Temperature.hot:
+              temp += 2;
+            case Temperature.normal:
+              temp += 0;
+            case Temperature.cold:
+              temp -= 2;
+            case Temperature.supercold:
+              temp -= 6;
+          }
+          if (feverGauge < 1) {
+            feverGauge += 0.01;
+          }
+          return true;
+        },
+      );
+
+      food.originPosition -= Vector2(food.size.x / 2, food.size.y);
+      food.position -= Vector2(food.size.x / 2, food.size.y);
+
+      return food;
+    });
+
     dash = Dash(animation: animationEatingNormal);
 
     add(ScreenHitbox());
@@ -86,6 +132,8 @@ class MyGame extends FlameGame {
     add(clock);
     add(fever);
     add(thermo);
+
+    FlameAudio.play('game_over.mp3');
   }
 
   @override
@@ -136,15 +184,50 @@ class MyGame extends FlameGame {
 
   @override
   void update(double dt) {
-    countdown.update(dt);
-    feverGauge = min((countdown.current * 4) / gameLength, 1);
-    temp = (sin((countdown.current * 5) / gameLength * (2 * pi)) * 24) + 24;
+    if (!isPlaying) {
+      return;
+    }
+    if (foods.every(
+          (food) =>
+              food.temp == Temperature.cold ||
+              food.temp == Temperature.supercold,
+        ) &&
+        temp > 36) {
+      foods.forEach((food) {
+        food.isDraggable = false;
+      });
+      FlameAudio.play('game_over.mp3');
+      countdown.stop();
+
+      isPlaying = false;
+    } else if (foods.every(
+          (food) =>
+              food.temp == Temperature.hot || food.temp == Temperature.extrahot,
+        ) &&
+        temp < 12) {
+      foods.forEach((food) {
+        food.isDraggable = false;
+      });
+      FlameAudio.play('game_over.mp3');
+      countdown.stop();
+      isPlaying = false;
+    } else {
+      countdown.update(dt);
+    }
+    // feverGauge = min((countdown.current * 4) / gameLength, 1);
+    // temp = (sin((countdown.current * 5) / gameLength * (2 * pi)) * 24) + 24;
     fever.feverGauge = feverGauge;
     clock.time = countdown.current;
     thermo.temp = temp;
 
     if (dash.isHovered) {
-      dash.animation = animationHungry;
+      if (temp > 36) {
+        dash.animation = animationHungryHot;
+      } else if (temp < 12) {
+        dash.animation = animationHungryCold;
+      } else {
+        dash.animation = animationHungryNormal;
+      }
     } else {
       if (temp > 36) {
         dash.animation = animationEatingHot;
@@ -155,6 +238,17 @@ class MyGame extends FlameGame {
       }
     }
 
+    if (countdown.finished) {
+      foods.forEach((food) {
+        food.isDraggable = false;
+      });
+      FlameAudio.play('game_over.mp3');
+      isPlaying = false;
+    }
+
+    if ((gameLength - countdown.current).toInt() == 15) {
+      FlameAudio.play('time_up.mp3');
+    }
     super.update(dt);
   }
 }

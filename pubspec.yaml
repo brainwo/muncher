@@ -26,6 +26,7 @@ flutter:
   uses-material-design: false
 
   assets:
+    - assets/audio/
     - assets/images/
 
   fonts:
