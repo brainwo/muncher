@@ -1,4 +1,4 @@
-import 'package:flamejam/colors.dart';
+import 'package:flamejam/const.dart';
 import 'package:flutter/material.dart';
 
 class Intro extends StatelessWidget {
@@ -6,6 +6,10 @@ class Intro extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 3)).whenComplete(
+      () => Navigator.pushReplacementNamed(context, '/game'),
+    );
+
     return const Material(
       color: Colors.black,
       child: Center(

@@ -1,4 +1,5 @@
-import 'package:flamejam/colors.dart';
+import 'package:flamejam/const.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
@@ -10,9 +11,11 @@ class Menu extends StatelessWidget {
       color: colorCyan,
       child: Center(
         child: MaterialButton(
-          child: Text("Hello"),
+          child: const Text('Hello'),
           onPressed: () {
-            print("Hello");
+            if (kDebugMode) {
+              print('Hello');
+            }
           },
         ),
       ),

@@ -18,9 +18,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => GameWidget(game: MyGame()),
-        // '/': (context) => const Intro(),
-        // '/menu': (context) => const Menu(),
+        '/': (context) => const Intro(),
+        '/game': (context) => GameWidget(game: MyGame()),
       },
     );
   }

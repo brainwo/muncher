@@ -4,10 +4,19 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flamejam/game.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const List<Map<String, dynamic>> food = [
-  {"name": ""}
+  {'name': 'pepper', 'property': 2},
+  {'name': 'tea', 'property': 2},
+  {'name': 'burger', 'property': 1},
+  {'name': 'pizza', 'property': 1},
+  {'name': 'tea', 'property': 0},
+  {'name': 'soda', 'property': -1},
+  {'name': 'muffin', 'property': -1},
+  {'name': 'sundae', 'property': -2},
+  {'name': 'popsicle', 'property': -2},
 ];
 
 enum Temperature {
@@ -22,14 +31,14 @@ class Food extends PositionComponent
         CollisionCallbacks,
         TapCallbacks,
         HoverCallbacks {
-  final Temperature temp;
-
   Food(this.temp) : super(size: Vector2(85, 75));
 
+  final Temperature temp;
   late ShapeHitbox hitbox;
+  bool _isDragged = false;
 
   @override
-  final bool debugMode = true;
+  final bool debugMode = kDebugMode;
 
   @override
   FutureOr<void> onLoad() {
@@ -59,6 +68,7 @@ class Food extends PositionComponent
 
   @override
   void onDragStart(DragStartEvent event) {
+    _isDragged = true;
     priority = 100;
 
     super.onDragStart(event);
@@ -66,6 +76,7 @@ class Food extends PositionComponent
 
   @override
   void onDragEnd(DragEndEvent event) {
+    _isDragged = false;
     super.onDragEnd(event);
   }
 
