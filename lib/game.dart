@@ -9,6 +9,7 @@ import 'package:flame/sprite.dart';
 
 import 'package:flamejam/components/dash.dart';
 import 'package:flamejam/components/plate/food.dart';
+import 'package:flamejam/components/plate/plate.dart';
 import 'package:flamejam/components/ui/clock.dart';
 import 'package:flamejam/components/ui/fever.dart';
 import 'package:flamejam/components/ui/thermo.dart';
@@ -38,11 +39,13 @@ class MyGame extends FlameGame {
   late final SpriteAnimation animationEatingNormal;
   late final SpriteAnimation animationEatingHot;
   late final SpriteAnimation animationEatingCold;
+  late final SpriteAnimation animationHungry;
 
   @override
   Future<void> onLoad() async {
     await Flame.images.load('foods.png');
     await Flame.images.load('table.png');
+    await Flame.images.load('plate.png');
     tableBackdrop = await imagesLoader.load('table.png');
     tableBackdropFlipped = await imagesLoader.load('table_flipped.png');
 
@@ -54,22 +57,30 @@ class MyGame extends FlameGame {
     animationEatingNormal = spriteSheet.createAnimation(row: 0, stepTime: 0.3);
     animationEatingHot = spriteSheet.createAnimation(row: 1, stepTime: 0.3);
     animationEatingCold = spriteSheet.createAnimation(row: 2, stepTime: 0.3);
+    animationHungry = spriteSheet.createAnimation(row: 3, stepTime: 0.3);
 
     countdown = Timer(gameLength);
     clock = Clock(time: countdown.current, gameLength: gameLength);
     fever = Fever(feverGauge: feverGauge);
     thermo = Thermometer(temp: temp);
 
+    final plates = [
+      Plate(position: Vector2(-237, 90)),
+      Plate(position: Vector2(-72, 114)),
+      Plate(position: Vector2(89, 90)),
+    ];
+
     final foods = [
-      Food(temp: Temperature.hot, position: Vector2(-182, 75)),
-      Food(temp: Temperature.hot, position: Vector2(-32, 86)),
-      Food(temp: Temperature.hot, position: Vector2(108, 75)),
+      Food.create(),
+      Food.create(),
+      Food.create(),
     ];
     dash = Dash(animation: animationEatingNormal);
 
     add(ScreenHitbox());
 
     world.add(dash);
+    world.addAll(plates);
     world.addAll(foods);
 
     add(clock);
@@ -132,12 +143,16 @@ class MyGame extends FlameGame {
     clock.time = countdown.current;
     thermo.temp = temp;
 
-    if (temp > 36) {
-      dash.animation = animationEatingHot;
-    } else if (temp < 12) {
-      dash.animation = animationEatingCold;
+    if (dash.isHovered) {
+      dash.animation = animationHungry;
     } else {
-      dash.animation = animationEatingNormal;
+      if (temp > 36) {
+        dash.animation = animationEatingHot;
+      } else if (temp < 12) {
+        dash.animation = animationEatingCold;
+      } else {
+        dash.animation = animationEatingNormal;
+      }
     }
 
     super.update(dt);

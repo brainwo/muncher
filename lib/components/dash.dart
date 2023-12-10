@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/collisions.dart';
@@ -7,7 +8,11 @@ import 'package:flamejam/game.dart';
 import 'package:flutter/foundation.dart';
 
 class Dash extends SpriteAnimationComponent
-    with DragCallbacks, HasGameReference<MyGame>, CollisionCallbacks {
+    with
+        DragCallbacks,
+        HasGameReference<MyGame>,
+        CollisionCallbacks,
+        HoverCallbacks {
   Dash({required super.animation})
       : super(size: Vector2(220, 210), position: Vector2(-110, -140));
 
@@ -26,10 +31,5 @@ class Dash extends SpriteAnimationComponent
       const Rect.fromLTWH(200, 160, 58, 34),
       Paint()..color = const Color.fromRGBO(54, 143, 193, 1),
     );
-  }
-
-  @override
-  void onDragUpdate(DragUpdateEvent event) {
-    super.onDragUpdate(event);
   }
 }
