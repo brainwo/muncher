@@ -148,7 +148,7 @@ class Food extends SpriteComponent
 
   void loadOtherFood() {
     final food = foodList.random();
-    final Vector2 foodSize = food['size'] as Vector2;
+    final foodSize = food['size'] as Vector2;
 
     final foodSprite = Sprite(
       Flame.images.fromCache('foods.png'),

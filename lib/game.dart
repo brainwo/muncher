@@ -185,6 +185,7 @@ class MyGame extends FlameGame {
   @override
   void update(double dt) {
     if (!isPlaying) {
+      super.update(dt);
       return;
     }
     if (foods.every(
@@ -192,10 +193,10 @@ class MyGame extends FlameGame {
               food.temp == Temperature.cold ||
               food.temp == Temperature.supercold,
         ) &&
-        temp < 12) {
-      foods.forEach((food) {
+        temp < 6) {
+      for (final food in foods) {
         food.isDraggable = false;
-      });
+      }
       FlameAudio.play('game_over.mp3');
       countdown.stop();
 
@@ -204,10 +205,10 @@ class MyGame extends FlameGame {
           (food) =>
               food.temp == Temperature.hot || food.temp == Temperature.extrahot,
         ) &&
-        temp > 36) {
-      foods.forEach((food) {
+        temp > 42) {
+      for (final food in foods) {
         food.isDraggable = false;
-      });
+      }
       FlameAudio.play('game_over.mp3');
       countdown.stop();
       isPlaying = false;
@@ -239,9 +240,9 @@ class MyGame extends FlameGame {
     }
 
     if (countdown.finished) {
-      foods.forEach((food) {
+      for (final food in foods) {
         food.isDraggable = false;
-      });
+      }
       FlameAudio.play('game_over.mp3');
       isPlaying = false;
     }
