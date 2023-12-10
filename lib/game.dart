@@ -5,6 +5,7 @@ import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flame/sprite.dart';
 
 import 'package:flamejam/components/dash.dart';
 import 'package:flamejam/components/plate/food.dart';
@@ -28,9 +29,15 @@ class MyGame extends FlameGame {
   late final Clock clock;
   late final Fever fever;
   late final Thermometer thermo;
+  late final Dash dash;
   final imagesLoader = Images();
   late final Image tableBackdrop;
   late final Image tableBackdropFlipped;
+
+  // animation
+  late final SpriteAnimation animationEatingNormal;
+  late final SpriteAnimation animationEatingHot;
+  late final SpriteAnimation animationEatingCold;
 
   @override
   Future<void> onLoad() async {
@@ -39,7 +46,14 @@ class MyGame extends FlameGame {
     tableBackdrop = await imagesLoader.load('table.png');
     tableBackdropFlipped = await imagesLoader.load('table_flipped.png');
 
-    final sprite = await loadSprite('eating_normal_1.png');
+    final spriteSheet = SpriteSheet(
+      image: await images.load('eating.png'),
+      srcSize: Vector2(220.0, 210.0),
+    );
+
+    animationEatingNormal = spriteSheet.createAnimation(row: 0, stepTime: 0.3);
+    animationEatingHot = spriteSheet.createAnimation(row: 1, stepTime: 0.3);
+    animationEatingCold = spriteSheet.createAnimation(row: 2, stepTime: 0.3);
 
     countdown = Timer(gameLength);
     clock = Clock(time: countdown.current, gameLength: gameLength);
@@ -51,7 +65,7 @@ class MyGame extends FlameGame {
       Food(temp: Temperature.hot, position: Vector2(-32, 86)),
       Food(temp: Temperature.hot, position: Vector2(108, 75)),
     ];
-    final dash = Dash(sprite: sprite);
+    dash = Dash(animation: animationEatingNormal);
 
     add(ScreenHitbox());
 
@@ -113,10 +127,18 @@ class MyGame extends FlameGame {
   void update(double dt) {
     countdown.update(dt);
     feverGauge = min((countdown.current * 4) / gameLength, 1);
-    temp = (sin(countdown.current / gameLength * (2 * pi)) * 24) + 24;
+    temp = (sin((countdown.current * 5) / gameLength * (2 * pi)) * 24) + 24;
     fever.feverGauge = feverGauge;
     clock.time = countdown.current;
     thermo.temp = temp;
+
+    if (temp > 36) {
+      dash.animation = animationEatingHot;
+    } else if (temp < 12) {
+      dash.animation = animationEatingCold;
+    } else {
+      dash.animation = animationEatingNormal;
+    }
 
     super.update(dt);
   }

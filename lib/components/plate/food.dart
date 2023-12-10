@@ -20,8 +20,11 @@ const List<Map<String, dynamic>> food = [
 ];
 
 enum Temperature {
+  extrahot,
   hot,
+  normal,
   cold,
+  supercold,
 }
 
 class Food extends PositionComponent
